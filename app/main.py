@@ -1,11 +1,11 @@
 import json
 import datetime
-from shop import Shop
-from customers import Customer
+from app.shop import Shop
+from app.customers import Customer
 
 
 def shop_trip() -> None:
-    with (open("config.json", "r") as f):
+    with open("app/config.json", "r") as f:
         all_data = json.load(f)
         shops = [Shop(*item.values()) for item in all_data["shops"]]
         customers = [
@@ -27,37 +27,45 @@ def shop_trip() -> None:
                     f"{customer.name}'s trip to the"
                     f" {shop.name} costs {full_coast}")
 
-            best_trip = min(list_trip)
+            best_coast = min(list_trip)[0]
+            best_shop = min(list_trip)[1]
 
-            if customer.money >= best_trip[0]:
-                print(f"{customer.name} rides to {best_trip[1].name}")
+            if customer.money >= best_coast:
+                print(f"{customer.name} rides to {best_shop.name}")
                 print("")
-                print(f"Date {datetime.datetime.now()}")
+                now = datetime.datetime.now()
+                formatted_date = now.strftime("Date: %d/%m/%Y %H:%M:%S")
+                print(formatted_date)
 
                 print(f"Thanks, {customer.name}, for your purchase!")
-                print("You have bought: ")
+                print("You have bought:")
+                cost_all_products = 0
                 for product, quantity in customer.product_cart.items():
+                    cost_each_product = (
+                        best_shop.products[product]
+                        * customer.product_cart[product]
+                    )
+                    if cost_each_product == int(cost_each_product):
+                        cost_each_product = int(cost_each_product)
+                    cost_all_products += cost_each_product
                     print(
                         f"{quantity} {product}s for"
-                        f" {shop.products[product] * quantity} dollars")
+                        f" {cost_each_product} dollars")
                 print(
                     f"Total cost is"
-                    f" {shop.cost_products(customer.product_cart)} dollars"
+                    f" {cost_all_products} dollars"
                 )
                 print("See you again!")
+                print("")
 
                 print(f"{customer.name} rides home")
-                customer.money = customer.money - best_trip[0]
+                customer.money = customer.money - best_coast
                 print(
                     f"{customer.name} now has"
                     f" {customer.money} dollars")
                 print("")
-                print("")
+
             else:
-                print(
-                    f"{customer.name}'s trip to the"
-                    f" {best_trip[1].name} costs {best_trip[0]}"
-                )
                 print(
                     f"{customer.name} doesn't have enough money"
                     f" to make a purchase in any shop"

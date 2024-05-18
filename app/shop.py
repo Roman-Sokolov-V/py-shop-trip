@@ -11,4 +11,4 @@ class Shop:
         coast = 0
         for product, value in product_cart.items():
             coast += self.products[product] * value
-        return round(coast, 2)
+        return coast

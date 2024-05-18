@@ -9,7 +9,7 @@ class Customer:
             name: str,
             product_cart: dict,
             location: list,
-            money: int | float,
+            money: float,
             car: dict
     ) -> None:
         self.name = name
