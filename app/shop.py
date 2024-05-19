@@ -8,7 +8,4 @@ class Shop:
     products: dict
 
     def cost_products(self, product_cart: dict) -> float:
-        coast = 0
-        for product, value in product_cart.items():
-            coast += self.products[product] * value
-        return coast
+        return sum(self.products[product] * value for product, value in product_cart.items())
