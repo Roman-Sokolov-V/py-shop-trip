@@ -1,4 +1,4 @@
-from math import sqrt
+from math import dist
 from app.cars import Car
 
 
@@ -23,6 +23,4 @@ class Customer:
         return f"Customer: {self.__dict__}"
 
     def distance(self, shop_location: list) -> float:
-        _x = abs(self.location[0] - shop_location[0])
-        _y = abs(self.location[1] - shop_location[1])
-        return sqrt(abs(_x ** 2 + _y ** 2))
+        return dist(self.location, shop_location)
